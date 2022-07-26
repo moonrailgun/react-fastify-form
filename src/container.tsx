@@ -3,7 +3,7 @@ import type { ComponentType } from 'react';
 /**
  * 容器配置
  */
-export interface MetaFormContainerProps {
+export interface FastifyFormContainerProps {
   loading: boolean;
   submitLabel?: string;
 
@@ -16,15 +16,15 @@ export interface MetaFormContainerProps {
   handleSubmit: () => void;
   children?: React.ReactNode;
 }
-export type MetaFormContainerComponent =
-  React.ComponentType<MetaFormContainerProps>;
-let MetaFormContainer: MetaFormContainerComponent;
-export function regFormContainer(component: MetaFormContainerComponent) {
-  MetaFormContainer = component;
+export type FastifyFormContainerComponent =
+  React.ComponentType<FastifyFormContainerProps>;
+let FastifyFormContainer: FastifyFormContainerComponent;
+export function regFormContainer(component: FastifyFormContainerComponent) {
+  FastifyFormContainer = component;
 }
 
 export function getFormContainer():
-  | ComponentType<MetaFormContainerProps>
+  | ComponentType<FastifyFormContainerProps>
   | undefined {
-  return MetaFormContainer;
+  return FastifyFormContainer;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import type { MetaFormFieldComponent, MetaFormFieldProps } from './field';
+import type { FastifyFormFieldComponent, FastifyFormFieldProps } from './field';
 
-export const CustomField: MetaFormFieldComponent<{
-  render: (props: MetaFormFieldProps) => React.ReactNode;
+export const CustomField: FastifyFormFieldComponent<{
+  render: (props: FastifyFormFieldProps) => React.ReactNode;
 }> = React.memo((props) => {
   const { render, ...others } = props;
 

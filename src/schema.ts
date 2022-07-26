@@ -3,11 +3,11 @@ import { string, object, ref } from 'yup';
 import type { ObjectShape } from 'yup/lib/object';
 
 /**
- * 创建MetaForm的Schema
+ * 创建FastifyForm的Schema
  *
  *
  */
-export function createMetaFormSchema(fieldMap: ObjectShape) {
+export function createFastifyFormSchema(fieldMap: ObjectShape) {
   return object().shape(fieldMap);
 }
 

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import type { useFormik } from 'formik';
 
-type MetaFormContextType = ReturnType<typeof useFormik>;
+type FastifyFormContextType = ReturnType<typeof useFormik>;
 
-export const MetaFormContext = React.createContext<MetaFormContextType | null>(
+export const FastifyFormContext = React.createContext<FastifyFormContextType | null>(
   null
 );
-MetaFormContext.displayName = 'MetaFormContext';
+FastifyFormContext.displayName = 'FastifyFormContext';
 
-export function useMetaFormContext(): MetaFormContextType | null {
-  return useContext(MetaFormContext);
+export function useFastifyFormContext(): FastifyFormContextType | null {
+  return useContext(FastifyFormContext);
 }

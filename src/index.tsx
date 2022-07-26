@@ -5,20 +5,20 @@ import _fromPairs from 'lodash/fromPairs';
 import _isFunction from 'lodash/isFunction';
 import _isEmpty from 'lodash/isEmpty';
 import type { ObjectSchema } from 'yup';
-import { MetaFormContext } from './context';
+import { FastifyFormContext } from './context';
 import { getField, regField } from './field';
 import type {
-  MetaFormFieldComponent,
-  MetaFormFieldProps,
-  MetaFormFieldMeta,
+  FastifyFormFieldComponent,
+  FastifyFormFieldProps,
+  FastifyFormFieldMeta,
 } from './field';
 import { getFormContainer } from './container';
 
 /**
  * 表单配置
  */
-export interface MetaFormProps {
-  fields: MetaFormFieldMeta[]; // 字段详情
+export interface FastifyFormProps {
+  fields: FastifyFormFieldMeta[]; // 字段详情
   schema?: ObjectSchema<any>; // yup schame object 用于表单校验
   layout?: 'horizontal' | 'vertical'; // 布局方式(默认水平)
   submitLabel?: string; // 提交按钮的标签名
@@ -31,7 +31,7 @@ export interface MetaFormProps {
  * 一个快速生成表单的组件
  * 用于通过配置来生成表单，简化通用代码
  */
-export const MetaForm: React.FC<MetaFormProps> = React.memo((props) => {
+export const FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
   const initialValues = useMemo(() => {
     return {
       ..._fromPairs(
@@ -65,10 +65,10 @@ export const MetaForm: React.FC<MetaFormProps> = React.memo((props) => {
   });
   const { handleSubmit, setFieldValue, values, errors } = formik;
 
-  const MetaFormContainer = getFormContainer();
+  const FastifyFormContainer = getFormContainer();
 
-  if (_isNil(MetaFormContainer)) {
-    console.warn('MetaFormContainer 没有被注册');
+  if (_isNil(FastifyFormContainer)) {
+    console.warn('FastifyFormContainer 没有被注册');
     return null;
   }
 
@@ -96,8 +96,8 @@ export const MetaForm: React.FC<MetaFormProps> = React.memo((props) => {
   }, [props.fields, values, errors, setFieldValue]);
 
   return (
-    <MetaFormContext.Provider value={formik}>
-      <MetaFormContainer
+    <FastifyFormContext.Provider value={formik}>
+      <FastifyFormContainer
         loading={loading}
         layout={props.layout ?? 'horizontal'}
         submitLabel={props.submitLabel}
@@ -105,19 +105,19 @@ export const MetaForm: React.FC<MetaFormProps> = React.memo((props) => {
         canSubmit={_isEmpty(errors)}
       >
         {fieldsRender}
-      </MetaFormContainer>
-    </MetaFormContext.Provider>
+      </FastifyFormContainer>
+    </FastifyFormContext.Provider>
   );
 });
-MetaForm.displayName = 'MetaForm';
-MetaForm.defaultProps = {
+FastifyForm.displayName = 'FastifyForm';
+FastifyForm.defaultProps = {
   submitLabel: '提交',
 };
 
 export { CustomField } from './CustomField';
-export type { MetaFormFieldComponent, MetaFormFieldProps, MetaFormFieldMeta };
+export type { FastifyFormFieldComponent, FastifyFormFieldProps, FastifyFormFieldMeta };
 export { regField };
 export { regFormContainer } from './container';
-export type { MetaFormContainerComponent } from './container';
-export { createMetaFormSchema, fieldSchema } from './schema';
-export { useMetaFormContext } from './context';
+export type { FastifyFormContainerComponent } from './container';
+export { createFastifyFormSchema, fieldSchema } from './schema';
+export { useFastifyFormContext } from './context';
