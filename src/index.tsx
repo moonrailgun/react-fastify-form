@@ -17,14 +17,17 @@ import { getFormContainer } from './container';
 /**
  * 表单配置
  */
-export interface FastifyFormProps {
+export interface FastifyFormProps<
+  T extends Record<string, any> = Record<string, any>
+> {
   fields: FastifyFormFieldMeta[]; // 字段详情
   schema?: ObjectSchema<any>; // yup schame object 用于表单校验
   layout?: 'horizontal' | 'vertical'; // 布局方式(默认水平)
   submitLabel?: string; // 提交按钮的标签名
-  initialValues?: any;
-  onSubmit: (values: any) => Promise<void> | void; // 点击提交按钮的回调
-  onChange?: (values: any) => void; // 数据更新回调
+  initialValues?: T;
+  onSubmit?: (values: T) => Promise<void> | void; // 点击提交按钮的回调
+  onChange?: (values: T) => void; // 数据更新回调
+  extraProps?: Record<string, any>;
 }
 
 /**
@@ -100,9 +103,10 @@ export const FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
       <FastifyFormContainer
         loading={loading}
         layout={props.layout ?? 'horizontal'}
-        submitLabel={props.submitLabel}
+        submitLabel={props.submitLabel ?? '提交'}
         handleSubmit={handleSubmit}
         canSubmit={_isEmpty(errors)}
+        extraProps={props.extraProps}
       >
         {fieldsRender}
       </FastifyFormContainer>
@@ -110,14 +114,18 @@ export const FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
   );
 });
 FastifyForm.displayName = 'FastifyForm';
-FastifyForm.defaultProps = {
-  submitLabel: '提交',
-};
 
 export { CustomField } from './CustomField';
-export type { FastifyFormFieldComponent, FastifyFormFieldProps, FastifyFormFieldMeta };
+export type {
+  FastifyFormFieldComponent,
+  FastifyFormFieldProps,
+  FastifyFormFieldMeta,
+};
 export { regField };
 export { regFormContainer } from './container';
-export type { FastifyFormContainerComponent } from './container';
+export type {
+  FastifyFormContainerComponent,
+  FastifyFormContainerProps,
+} from './container';
 export { createFastifyFormSchema, fieldSchema } from './schema';
 export { useFastifyFormContext } from './context';

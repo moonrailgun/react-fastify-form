@@ -15,6 +15,8 @@ export interface FastifyFormContainerProps {
   canSubmit?: boolean;
   handleSubmit: () => void;
   children?: React.ReactNode;
+
+  extraProps?: Record<string, any>;
 }
 export type FastifyFormContainerComponent =
   React.ComponentType<FastifyFormContainerProps>;
