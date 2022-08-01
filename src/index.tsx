@@ -30,11 +30,7 @@ export interface FastifyFormProps<
   extraProps?: Record<string, any>;
 }
 
-/**
- * 一个快速生成表单的组件
- * 用于通过配置来生成表单，简化通用代码
- */
-export const FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
+const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
   const initialValues = useMemo(() => {
     return {
       ..._fromPairs(
@@ -113,7 +109,17 @@ export const FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
     </FastifyFormContext.Provider>
   );
 });
-FastifyForm.displayName = 'FastifyForm';
+_FastifyForm.displayName = 'FastifyForm';
+
+/**
+ * 一个快速生成表单的组件
+ * 用于通过配置来生成表单，简化通用代码
+ */
+export const FastifyForm = _FastifyForm as unknown as <
+  T extends Record<string, any> = {}
+>(
+  props: FastifyFormProps<T>
+) => React.ReactElement | null;
 
 export { CustomField } from './CustomField';
 export type {
