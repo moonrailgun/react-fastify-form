@@ -3,7 +3,9 @@ import type { ComponentType } from 'react';
 /**
  * 容器配置
  */
-export interface FastifyFormContainerProps {
+export interface FastifyFormContainerProps<
+  T extends Record<string, any> = Record<string, any>
+> {
   loading: boolean;
   submitLabel?: string;
 
@@ -16,7 +18,7 @@ export interface FastifyFormContainerProps {
   handleSubmit: () => void;
   children?: React.ReactNode;
 
-  extraProps?: Record<string, any>;
+  extraProps?: T;
 }
 export type FastifyFormContainerComponent =
   React.ComponentType<FastifyFormContainerProps>;
