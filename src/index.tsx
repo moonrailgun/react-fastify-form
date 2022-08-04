@@ -1,11 +1,10 @@
 import React, { useLayoutEffect, useMemo, useState } from 'react';
-import { Field, FieldProps, useFormik } from 'formik';
+import { Field, FieldProps, FormikProvider, useFormik } from 'formik';
 import _isNil from 'lodash/isNil';
 import _fromPairs from 'lodash/fromPairs';
 import _isFunction from 'lodash/isFunction';
 import _isEmpty from 'lodash/isEmpty';
 import type { ObjectSchema } from 'yup';
-import { FastifyFormContext } from './context';
 import { getField, regField } from './field';
 import type {
   FastifyFormFieldComponent,
@@ -65,7 +64,7 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
       _isFunction(props.onChange) && props.onChange(values);
     },
   });
-  const { handleSubmit, errors } = formik;
+  const { handleSubmit, errors, setFieldValue } = formik;
 
   const FastifyFormContainer = getFormContainer();
 
@@ -90,7 +89,7 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
                 {...fieldMeta}
                 value={field.value}
                 error={meta.error}
-                onChange={field.onChange}
+                onChange={(val: any) => setFieldValue(fieldName, val, false)}
                 onBlur={field.onBlur}
               />
             )}
@@ -101,7 +100,7 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
   }, [props.fields]);
 
   return (
-    <FastifyFormContext.Provider value={formik}>
+    <FormikProvider value={formik}>
       <FastifyFormContainer
         loading={loading}
         layout={props.layout ?? 'horizontal'}
@@ -112,7 +111,7 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
       >
         {fieldsRender}
       </FastifyFormContainer>
-    </FastifyFormContext.Provider>
+    </FormikProvider>
   );
 });
 _FastifyForm.displayName = 'FastifyForm';
