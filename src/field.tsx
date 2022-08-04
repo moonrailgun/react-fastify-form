@@ -14,6 +14,7 @@ export interface FastifyFormFieldProps extends FastifyFormFieldCommon {
   value: any;
   error: string | undefined;
   onChange: (val: any) => void; // 修改数据的回调函数
+  onBlur: () => void;
 }
 
 /**
@@ -27,7 +28,10 @@ const fieldMap = new Map<string, FastifyFormFieldComponent>();
 /**
  * 注册组件
  */
-export function regField(type: string, component: FastifyFormFieldComponent<any>) {
+export function regField(
+  type: string,
+  component: FastifyFormFieldComponent<any>
+) {
   fieldMap.set(type, component);
 }
 

@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useMemo, useState } from 'react';
-import { useFormik } from 'formik';
+import { Field, FieldProps, useFormik } from 'formik';
 import _isNil from 'lodash/isNil';
 import _fromPairs from 'lodash/fromPairs';
 import _isFunction from 'lodash/isFunction';
@@ -14,11 +14,14 @@ import type {
 } from './field';
 import { getFormContainer } from './container';
 
+export interface DefaultFastifyFormExtraProps {}
+
 /**
  * 表单配置
  */
 export interface FastifyFormProps<
-  T extends Record<string, any> = Record<string, any>
+  T extends Record<string, any> = Record<string, any>,
+  K extends Record<string, any> = DefaultFastifyFormExtraProps
 > {
   fields: FastifyFormFieldMeta[]; // 字段详情
   schema?: ObjectSchema<any>; // yup schame object 用于表单校验
@@ -27,7 +30,7 @@ export interface FastifyFormProps<
   initialValues?: T;
   onSubmit?: (values: T) => Promise<void> | void; // 点击提交按钮的回调
   onChange?: (values: T) => void; // 数据更新回调
-  extraProps?: Record<string, any>;
+  extraProps?: K;
 }
 
 const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
@@ -62,7 +65,7 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
       _isFunction(props.onChange) && props.onChange(values);
     },
   });
-  const { handleSubmit, setFieldValue, values, errors } = formik;
+  const { handleSubmit, errors } = formik;
 
   const FastifyFormContainer = getFormContainer();
 
@@ -74,25 +77,28 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
   const fieldsRender = useMemo(() => {
     return props.fields.map((fieldMeta, i) => {
       const fieldName = fieldMeta.name;
-      const value = values[fieldName];
-      const error = errors[fieldName];
       const Component = getField(fieldMeta.type);
 
       if (_isNil(Component)) {
         return null;
       } else {
         return (
-          <Component
-            key={fieldName + i}
-            {...fieldMeta}
-            value={value}
-            error={error}
-            onChange={(val: any) => setFieldValue(fieldName, val)}
-          />
+          <Field name={fieldName}>
+            {({ field, meta }: FieldProps<any>) => (
+              <Component
+                key={fieldName + i}
+                {...fieldMeta}
+                value={field.value}
+                error={meta.error}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              />
+            )}
+          </Field>
         );
       }
     });
-  }, [props.fields, values, errors, setFieldValue]);
+  }, [props.fields]);
 
   return (
     <FastifyFormContext.Provider value={formik}>
@@ -116,9 +122,10 @@ _FastifyForm.displayName = 'FastifyForm';
  * 用于通过配置来生成表单，简化通用代码
  */
 export const FastifyForm = _FastifyForm as unknown as <
-  T extends Record<string, any> = {}
+  T extends Record<string, any> = {},
+  K extends Record<string, any> = {}
 >(
-  props: FastifyFormProps<T>
+  props: FastifyFormProps<T, K>
 ) => React.ReactElement | null;
 
 export { CustomField } from './CustomField';
