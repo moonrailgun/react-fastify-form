@@ -135,3 +135,4 @@ export type {
 } from './container';
 export { createFastifyFormSchema, fieldSchema } from './schema';
 export { useFastifyFormContext } from './context';
+export type { FastifyFormInstance } from './context';
