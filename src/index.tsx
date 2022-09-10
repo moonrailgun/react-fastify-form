@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Field, FieldProps, FormikProvider, useFormik } from 'formik';
 import _isNil from 'lodash/isNil';
 import _fromPairs from 'lodash/fromPairs';
@@ -12,6 +18,7 @@ import type {
   FastifyFormFieldMeta,
 } from './field';
 import { getFormContainer } from './container';
+import { values } from 'lodash';
 
 export interface DefaultFastifyFormExtraProps {}
 
@@ -49,9 +56,16 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
     typeof props.onChange === 'function' && props.onChange(initialValues);
   }, []);
 
+  const handleValuesChange = useCallback((values: Record<string, any>) => {
+    _isFunction(props.onChange) && props.onChange(values);
+  }, []);
+
   const formik = useFormik({
     initialValues,
     validationSchema: props.schema,
+    validateOnBlur: false,
+    validateOnMount: false,
+    validateOnChange: false, // 移除默认行为，全改为手动触发
     onSubmit: async (values) => {
       setLoading(true);
       try {
@@ -59,9 +73,6 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
       } finally {
         setLoading(false);
       }
-    },
-    validate: (values) => {
-      _isFunction(props.onChange) && props.onChange(values);
     },
   });
   const { handleSubmit, errors, setFieldValue } = formik;
@@ -89,8 +100,17 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
                 {...fieldMeta}
                 value={field.value}
                 error={meta.error}
-                onChange={(val: any) => setFieldValue(fieldName, val, false)}
-                onBlur={field.onBlur}
+                onChange={(val: any) => {
+                  setFieldValue(fieldName, val, false);
+                  handleValuesChange({
+                    ...formik.values,
+                    [fieldName]: val,
+                  });
+                }}
+                onBlur={(e: any) => {
+                  field.onBlur(e);
+                  formik.validateField(fieldName);
+                }}
               />
             )}
           </Field>
