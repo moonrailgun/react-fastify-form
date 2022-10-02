@@ -18,7 +18,6 @@ import type {
   FastifyFormFieldMeta,
 } from './field';
 import { getFormContainer } from './container';
-import { values } from 'lodash';
 
 export interface DefaultFastifyFormExtraProps {}
 
