@@ -1,5 +1,5 @@
 /* eslint-disable id-blacklist */
-import { string, object, ref } from 'yup';
+import { string, object, ref, mixed } from 'yup';
 import type { ObjectShape } from 'yup/lib/object';
 
 /**
@@ -14,4 +14,5 @@ export function createFastifyFormSchema(fieldMap: ObjectShape) {
 export const fieldSchema = {
   string,
   ref,
+  mixed,
 };

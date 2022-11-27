@@ -92,10 +92,10 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
         return null;
       } else {
         return (
-          <Field name={fieldName}>
+          <Field name={fieldName} key={fieldName + i}>
             {({ field, meta }: FieldProps<any>) => (
               <Component
-                key={fieldName + i}
+                key={fieldName + i + 'component'}
                 {...fieldMeta}
                 value={field.value}
                 error={meta.error}
