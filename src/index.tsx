@@ -79,7 +79,7 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
   const FastifyFormContainer = getFormContainer();
 
   if (_isNil(FastifyFormContainer)) {
-    console.warn('FastifyFormContainer 没有被注册');
+    console.warn('FastifyFormContainer not registered');
     return null;
   }
 
@@ -123,7 +123,7 @@ const _FastifyForm: React.FC<FastifyFormProps> = React.memo((props) => {
       <FastifyFormContainer
         loading={loading}
         layout={props.layout ?? 'horizontal'}
-        submitLabel={props.submitLabel ?? '提交'}
+        submitLabel={props.submitLabel}
         handleSubmit={handleSubmit}
         canSubmit={_isEmpty(errors)}
         extraProps={props.extraProps}
